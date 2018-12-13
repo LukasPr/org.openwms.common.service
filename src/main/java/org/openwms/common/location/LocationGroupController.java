@@ -25,12 +25,7 @@ import org.openwms.common.location.api.ErrorCodeVO;
 import org.openwms.common.location.api.LocationGroupState;
 import org.openwms.common.location.api.LocationGroupVO;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -86,6 +81,11 @@ class LocationGroupController {
 
     @PatchMapping(value = CommonConstants.API_LOCATIONGROUPS, params = {"name"})
     void updateState(@RequestParam(name = "name") String locationGroupName, @RequestBody ErrorCodeVO errorCode) {
+        locationGroupService.changeGroupStates(locationGroupName, groupStateIn.transform(errorCode.getErrorCode()), groupStateOut.transform(errorCode.getErrorCode()));
+    }
+
+    @PutMapping(value = CommonConstants.API_LOCATIONGROUPS, params = {"name"})
+    void updateState2(@RequestParam(name = "name") String locationGroupName, @RequestBody ErrorCodeVO errorCode) {
         locationGroupService.changeGroupStates(locationGroupName, groupStateIn.transform(errorCode.getErrorCode()), groupStateOut.transform(errorCode.getErrorCode()));
     }
 
