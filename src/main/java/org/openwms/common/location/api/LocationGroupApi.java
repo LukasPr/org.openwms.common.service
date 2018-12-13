@@ -16,6 +16,7 @@
 package org.openwms.common.location.api;
 
 import org.openwms.common.CommonConstants;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A LocationGroupApi.
@@ -39,15 +41,16 @@ public interface LocationGroupApi {
      * @param name The name of the LocationGroup
      * @return The instance or may result in a 404-Not Found
      */
-    @GetMapping(value = CommonConstants.API_LOCATIONGROUPS, params = {"name"})
-    LocationGroupVO findByName(@RequestParam("name") String name);
+    @GetMapping(value = CommonConstants.API_LOCATION_GROUPS, params = {"name"})
+    @Cacheable("locationGroups")
+    Optional<LocationGroupVO> findByName(@RequestParam("name") String name);
 
     /**
      * Find and return all existing {@code LocationGroup} representations.
      *
      * @return Never {@literal null}
      */
-    @GetMapping(value = CommonConstants.API_LOCATIONGROUPS)
+    @GetMapping(value = CommonConstants.API_LOCATION_GROUPS)
     List<LocationGroupVO> findAll();
 
     /**
@@ -57,9 +60,9 @@ public interface LocationGroupApi {
      * @param name The name of the LocationGroup
      * @param errorCode The error code as String
      */
-    @PatchMapping(value = CommonConstants.API_LOCATIONGROUPS, params = {"name"})
+    @PatchMapping(value = CommonConstants.API_LOCATION_GROUPS, params = {"name"})
     void updateState(@RequestParam(name = "name") String name, @RequestBody ErrorCodeVO errorCode);
 
-    @PatchMapping(value = CommonConstants.API_LOCATIONGROUPS + "/{id}")
+    @PatchMapping(value = CommonConstants.API_LOCATION_GROUPS + "/{id}")
     void save(@PathVariable("id") String id, @RequestParam(name = "statein", required = false) LocationGroupState stateIn, @RequestParam(name = "stateout", required = false) LocationGroupState stateOut);
 }

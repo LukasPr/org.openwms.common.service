@@ -15,22 +15,17 @@
  */
 package org.openwms.common.location.api;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-
 /**
- * A StockLocationApi.
+ * A Target represents a target of a TransportOrder.
  *
  * @author <a href="mailto:scherrer@openwms.org">Heiko Scherrer</a>
  */
-@FeignClient(name = "common-service", qualifier = "stockLocationApi", decode404 = true)
-public interface StockLocationApi {
+public interface Target {
 
-    @GetMapping(value = "/stock", params = {"stockLocationGroupNames", "count"})
-    @Cacheable("locations")
-    List<LocationVO> findStockLocationSimple(@RequestParam("stockLocationGroupNames") List<String> stockLocationGroupNames, @RequestParam("count") int count);
+    /**
+     * Returns the unique business key of the Target.
+     *
+     * @return Unique business key
+     */
+    String asString();
 }
